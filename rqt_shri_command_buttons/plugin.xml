@@ -1,0 +1,12 @@
+<library path="src">
+  <class name="CommandButtons" type="rqt_shri_command_buttons.command_button.CommandButtons" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      A Python GUI plugin for command Buttons
+    </description>
+    <qtgui>
+      <label>Command Buttons</label>
+      <icon type="theme">applications-other</icon>
+      <statustip>A Python GUI plugin for command buttons.</statustip>
+    </qtgui>
+  </class>
+</library>

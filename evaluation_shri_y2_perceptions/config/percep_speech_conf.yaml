@@ -1,0 +1,8 @@
+speech_recognition:
+  target_memory: 'social_events_memory'
+  events: ['speech_recognized']
+  callback_config:
+    recognized_word: ['google_cloud_speech.msg/RecognizedWord', 'handle_recognized_word']
+  data:
+    recognized_word: ''
+    confidence: 0.0
