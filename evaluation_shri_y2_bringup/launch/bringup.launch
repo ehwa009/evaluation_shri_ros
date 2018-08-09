@@ -1,30 +1,40 @@
 <launch>
     <arg name="use_nao_speech" default="false" />
+    <arg name="nao_ip" default="192.168.66.101" />
     <arg name="gaze_default_height" default="0.4" />
 
-    <arg name="camera_offset_x" default="0.0" />
-    <arg name="camera_offset_y" default="0.0" />
-    <arg name="camera_offset_z" default="0.0" />
+    <arg name="camera_offset_x" default="-0.35" />
+    <arg name="camera_offset_y" default="-0.2" />
+    <arg name="camera_offset_z" default="0.65" />
     <arg name="camera_offset_roll" default="0.0" />
     <arg name="camera_offset_pitch" default="0.0" />
     <arg name="camera_offset_yaw" default="0.0" />
+
+    <arg name="robot_offset_x" default="0.0" />
+    <arg name="robot_offset_y" default="0.0" />
+    <arg name="robot_offset_z" default="0.7" />
 
     <!-- For Social Mind Bringup -->
     <include file="$(find social_mind)/launch/bringup.launch">
         <arg name="project_path" value="~/shri_projects/evaluation_shri" />
         <arg name="gaze_default_height" value="$(arg gaze_default_height)" />
-        <arg name="fake_render_speech" default="false" />
+        <arg name="fake_render_speech" default="true" />
         <arg name="fake_render_gesture" default="false" />
-        <arg name="fake_render_facial_expression" default="false" />
+        <arg name="fake_render_facial_expression" default="true" />
     </include>
 
     <!-- For NAO Bringup -->
     <include file="$(find nao_shri_bringup)/launch/bringup.launch">
         <arg name="use_nao_speech" value="$(arg use_nao_speech)" />
+        <arg name="nao_ip" value="$(arg nao_ip)" />
     </include>
 
+    <node name="static_robot_tf_publisher" type="static_transform_publisher" pkg="tf2_ros"
+        args="$(arg robot_offset_x) $(arg robot_offset_y) $(arg robot_offset_z) 0 0 0 world odom"
+        output="screen" />
+
     <!-- For Google Cloud Speech -->
-    <include file="$(find google_cloud_speech)/launch/bringup.launch" />
+    <!-- <include file="$(find google_cloud_speech)/launch/bringup.launch" /> -->
     <node name="sp_speech_recognizer" type="percep_speech.py" pkg="evaluation_shri_y2_perceptions" output="screen">
         <param name="config_file" value="$(find evaluation_shri_y2_perceptions)/config/percep_speech_conf.yaml" />
     </node>
@@ -42,10 +52,14 @@
         <arg name="offset_yaw" value="$(arg camera_offset_yaw)" />
     </include>
 
+    <node name="sp_face_detector" type="percep_face_detect.py" pkg="evaluation_shri_y2_perceptions" output="screen">
+        <param name="config_file" value="$(find evaluation_shri_y2_perceptions)/config/percep_face_detection_conf.yaml" />
+    </node>
+
     <!-- For Polly Speech -->
-    <include file="$(find polly_speech)/launch/bringup.launch" unless="$(arg use_nao_speech)" />
-    <node name="render_speech" type="render_speech.py" pkg="evaluation_shri_y2_renders" output="screen" unless="$(arg use_nao_speech)" />
+    <!-- <include file="$(find polly_speech)/launch/bringup.launch" unless="$(arg use_nao_speech)" /> -->
+    <!-- <node name="render_speech" type="render_speech.py" pkg="evaluation_shri_y2_renders" output="screen" unless="$(arg use_nao_speech)" /> -->
 
     <!-- For Commmand GUI -->
-    <node name="command_buttons" type="rqt_shri_command_buttons" pkg="rqt_shri_command_buttons" output="screen"/>
+    <!-- <node name="command_buttons" type="rqt_shri_command_buttons" pkg="rqt_shri_command_buttons" output="screen"/> -->
 </launch>

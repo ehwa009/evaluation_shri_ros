@@ -1,0 +1,18 @@
+face_detection:
+  target_memory:     'social_events_memory'
+  events:            ['face_detected', 'face_disappeared']
+  callback_config:
+      nuitrack/skeletons: ['nuitrack_msgs.msg/SkeletonDataArray', 'handle_skeleton_detected']
+  data:
+      count:         0
+
+persons:
+  target_memory:     'environmental_memory'
+  events:            []
+  callback_config:   {}
+  data:
+      name:          ''
+      description:   ''
+      xyz:           [0.0, 0.0, 0.0]  # Represents the x, y, z
+      rpy:           [0.0, 0.0, 0.0]  # Represents the fixed axis roll, pitch, yaw
+      frame_id:      'world'
