@@ -18,7 +18,7 @@
     <include file="$(find social_mind)/launch/bringup.launch">
         <arg name="project_path" value="~/shri_projects/evaluation_shri" />
         <arg name="gaze_default_height" value="$(arg gaze_default_height)" />
-        <arg name="fake_render_speech" default="true" />
+        <arg name="fake_render_speech" default="false" />
         <arg name="fake_render_gesture" default="false" />
         <arg name="fake_render_facial_expression" default="true" />
     </include>
@@ -34,10 +34,13 @@
         output="screen" />
 
     <!-- For Google Cloud Speech -->
-    <!-- <include file="$(find google_cloud_speech)/launch/bringup.launch" /> -->
+    <include file="$(find google_cloud_speech)/launch/bringup.launch" />
     <node name="sp_speech_recognizer" type="percep_speech.py" pkg="evaluation_shri_y2_perceptions" output="screen">
         <param name="config_file" value="$(find evaluation_shri_y2_perceptions)/config/percep_speech_conf.yaml" />
     </node>
+
+    <!-- Dialogflow -->
+    <include file="$(find dialogflow_dialog)/launch/bringup.launch" />
 
     <!-- For Nuitrack -->
     <include file="$(find nuitrack_ros)/launch/nuitrack.launch">
@@ -57,8 +60,8 @@
     </node>
 
     <!-- For Polly Speech -->
-    <!-- <include file="$(find polly_speech)/launch/bringup.launch" unless="$(arg use_nao_speech)" /> -->
-    <!-- <node name="render_speech" type="render_speech.py" pkg="evaluation_shri_y2_renders" output="screen" unless="$(arg use_nao_speech)" /> -->
+    <include file="$(find polly_speech)/launch/bringup.launch" unless="$(arg use_nao_speech)" />
+    <node name="render_speech" type="render_speech.py" pkg="evaluation_shri_y2_renders" output="screen" unless="$(arg use_nao_speech)" />
 
     <!-- For Commmand GUI -->
     <!-- <node name="command_buttons" type="rqt_shri_command_buttons" pkg="rqt_shri_command_buttons" output="screen"/> -->
