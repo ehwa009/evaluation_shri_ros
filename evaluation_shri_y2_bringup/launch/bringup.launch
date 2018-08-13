@@ -1,18 +1,18 @@
 <launch>
     <arg name="use_nao_speech" default="false" />
-    <arg name="nao_ip" default="192.168.66.101" />
+    <arg name="nao_ip" default="192.168.66.100" />
     <arg name="gaze_default_height" default="0.4" />
 
-    <arg name="camera_offset_x" default="-0.35" />
-    <arg name="camera_offset_y" default="-0.2" />
-    <arg name="camera_offset_z" default="0.65" />
+    <arg name="camera_offset_x" default="-0.80" />
+    <arg name="camera_offset_y" default="0.35" />
+    <arg name="camera_offset_z" default="0.33" />
     <arg name="camera_offset_roll" default="0.0" />
     <arg name="camera_offset_pitch" default="0.0" />
     <arg name="camera_offset_yaw" default="0.0" />
 
     <arg name="robot_offset_x" default="0.0" />
     <arg name="robot_offset_y" default="0.0" />
-    <arg name="robot_offset_z" default="0.7" />
+    <arg name="robot_offset_z" default="0.72" />
 
     <!-- For Social Mind Bringup -->
     <include file="$(find social_mind)/launch/bringup.launch">
