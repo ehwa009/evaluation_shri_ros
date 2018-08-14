@@ -10,7 +10,7 @@ from qt_gui.plugin import Plugin
 from python_qt_binding import loadUi
 from python_qt_binding.QtWidgets import QWidget
 from mind_msgs.msg import RaisingEvents
-from std_msgs.msg import Int16
+from std_msgs.msg import Int16, Bool, Empty
 
 class CommandButtons(Plugin):
     def __init__(self, context):
@@ -27,8 +27,10 @@ class CommandButtons(Plugin):
 
         context.add_widget(self._widget)
 
-        self.pub_events = rospy.Publisher('raising_events', RaisingEvents, queue_size=1)
-        self.pub_select_scenario = rospy.Publisher('/select_evaluation_scenario', Int16, queue_size=1)
+        self.pub_events = rospy.Publisher('raising_events', RaisingEvents, queue_size=10)
+        self.change_session_id = rospy.Publisher('change_the_session_id', Empty, queue_size=10)
+        self.pub_select_scenario = rospy.Publisher('select_evaluation_scenario', Int16, queue_size=10)
+        self.pub_set_enable_leaning_forward = rospy.Publisher('set_enable_leaning_forward', Bool, queue_size=10)
 
         self._widget.buttonSelect0.clicked.connect(self.handle_select_scenario)
         self._widget.buttonSelect1.clicked.connect(self.handle_select_scenario)
@@ -61,6 +63,7 @@ class CommandButtons(Plugin):
             self._widget.buttonSelect3.setEnabled(False)
             self._widget.buttonStart.setEnabled(True)
             self.pub_select_scenario.publish(0)
+            self.pub_set_enable_leaning_forward.publish(False) 
             self.scenario_selected = True
 
         elif cmd_msg.lower() == 'leaning forward':
@@ -70,6 +73,7 @@ class CommandButtons(Plugin):
             self._widget.buttonSelect3.setEnabled(False)
             self._widget.buttonStart.setEnabled(True)
             self.pub_select_scenario.publish(1)
+            self.pub_set_enable_leaning_forward.publish(True)            
             self.scenario_selected = True
 
         elif cmd_msg.lower() == 'self disclosure':
@@ -78,6 +82,7 @@ class CommandButtons(Plugin):
             self._widget.buttonSelect1.setEnabled(False)
             self._widget.buttonSelect3.setEnabled(False)
             self._widget.buttonStart.setEnabled(True)
+            self.pub_set_enable_leaning_forward.publish(False) 
             self.pub_select_scenario.publish(2)
             self.scenario_selected = True
 
@@ -87,15 +92,17 @@ class CommandButtons(Plugin):
             self._widget.buttonSelect1.setEnabled(False)
             self._widget.buttonSelect2.setEnabled(False)
             self._widget.buttonStart.setEnabled(True)
+            self.pub_set_enable_leaning_forward.publish(False) 
             self.pub_select_scenario.publish(3)
             self.scenario_selected = True
 
     def handle_start_scenario(self):
-        msg = RaisingEvents()
-        msg.header.stamp = rospy.Time.now()
-        msg.events.append('human_appeared')
+        # msg = RaisingEvents()
+        # msg.header.stamp = rospy.Time.now()
+        # msg.events.append('human_appeared')
 
-        self.pub_events.publish(msg)
+        # self.pub_events.publish(msg)
+        self.change_session_id.publish()
 
     def shutdown_plugin(self):
         # TODO unregister all publishers here
