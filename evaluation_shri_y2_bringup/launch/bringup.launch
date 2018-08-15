@@ -64,5 +64,5 @@
     <node name="render_speech" type="render_speech.py" pkg="evaluation_shri_y2_renders" output="screen" unless="$(arg use_nao_speech)" />
 
     <!-- For Commmand GUI -->
-    <!-- <node name="command_buttons" type="rqt_shri_command_buttons" pkg="rqt_shri_command_buttons" output="screen"/> -->
+    <node name="command_buttons" type="rqt_shri_command_buttons" pkg="rqt_shri_command_buttons" output="screen"/>
 </launch>
