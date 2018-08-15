@@ -1,6 +1,6 @@
 <launch>
     <arg name="use_nao_speech" default="false" />
-    <arg name="nao_ip" default="192.168.66.101" />
+    <arg name="nao_ip" default="192.168.66.100" />
     <arg name="gaze_default_height" default="0.4" />
 
     <arg name="camera_offset_x" default="-0.80" />
