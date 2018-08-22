@@ -3,7 +3,7 @@
     <arg name="nao_ip" default="192.168.66.100" />
     <arg name="gaze_default_height" default="0.4" />
 
-    <arg name="camera_offset_x" default="-0.80" />
+    <arg name="camera_offset_x" default="-1.40" />
     <arg name="camera_offset_y" default="0.55" />
     <arg name="camera_offset_z" default="0.33" />
     <arg name="camera_offset_roll" default="0.0" />
@@ -34,7 +34,9 @@
         output="screen" />
 
     <!-- For Google Cloud Speech -->
-    <include file="$(find google_cloud_speech)/launch/bringup.launch" />
+    <include file="$(find google_cloud_speech)/launch/bringup.launch" >
+        <arg name="always_listening" value="false"/>
+    </include>
     <node name="sp_speech_recognizer" type="percep_speech.py" pkg="evaluation_shri_y2_perceptions" output="screen">
         <param name="config_file" value="$(find evaluation_shri_y2_perceptions)/config/percep_speech_conf.yaml" />
     </node>
@@ -58,6 +60,13 @@
     <node name="sp_face_detector" type="percep_face_detect.py" pkg="evaluation_shri_y2_perceptions" output="screen">
         <param name="config_file" value="$(find evaluation_shri_y2_perceptions)/config/percep_face_detection_conf.yaml" />
     </node>
+
+    <!-- Static Objects -->
+    <node name="sp_static_objects" type="percep_static_objects.py" pkg="evaluation_shri_y2_perceptions" output="screen">
+        <param name="config_file" value="$(find evaluation_shri_y2_perceptions)/config/percep_static_objects_conf.yaml" />
+        <param name="object_list_file" value="$(find evaluation_shri_y2_perceptions)/config/object_list.yaml" />
+    </node>
+    <node name="object_tf_publisher" type="objects_tf_publisher.py" pkg="evaluation_shri_y2_perceptions" output="screen" />
 
     <!-- For Polly Speech -->
     <include file="$(find polly_speech)/launch/bringup.launch" unless="$(arg use_nao_speech)" />

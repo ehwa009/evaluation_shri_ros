@@ -1,0 +1,24 @@
+objects:
+    target_memory: 'environmental_memory'
+    events: []
+    callback_config: {}
+    data:
+        name: ''
+        description: ''
+        xyz: [0.0, 0.0, 0.0]  # Represents the x, y, z
+        rpy: [0.0, 0.0, 0.0]  # Represents the fixed axis roll, pitch, yaw
+        frame_id: 'world'     # frame_id
+        geometry:
+          box: [1.0, 1.0, 1.0]  # Size for width, depth, height
+          #cylinder: [1.0, 1.0, 1.0]  # Size for radius, height
+          #sphere: [1.0, 1.0, 1.0]         # Size for radius
+          #mesh: 'file_name.dae' # Mesh file name
+        material:
+          color: [1.0, 1.0, 1.0, 1.0] # RGBA
+
+objects_info:
+    target_memory: 'environmental_memory'
+    events: []
+    callback_config: {}
+    data:
+        num_of_objects: 0

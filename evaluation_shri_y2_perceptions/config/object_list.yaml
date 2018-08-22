@@ -1,0 +1,8 @@
+door:
+  description: 'Door'
+  xyz: [4.5, -2.2, 1.0]
+  frame_id: 'world'
+  geometry:
+    box: [0.1, 0.1, 0.1]
+  material:
+    color: [1.0, 0.0, 0.0, 1.0]
