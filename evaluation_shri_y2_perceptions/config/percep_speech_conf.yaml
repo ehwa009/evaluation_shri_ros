@@ -1,8 +1,9 @@
 speech_recognition:
   target_memory: 'social_events_memory'
-  events: ['speech_recognized']
+  events: ['speech_recognized', 'silency_detected']
   callback_config:
     recognized_word: ['google_cloud_speech.msg/RecognizedWord', 'handle_recognized_word']
+    silency_detected: ['std_msgs.msg/Empty', 'handle_silency_detected']
   data:
     recognized_word: ''
     confidence: 0.0

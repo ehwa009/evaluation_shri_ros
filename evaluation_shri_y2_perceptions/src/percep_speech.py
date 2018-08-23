@@ -19,7 +19,10 @@ class SpeechRecognizer(PerceptionBase):
         write_data['confidence'] = msg.confidence
 
         self.save_to_memory(self.conf_data.keys()[0], data=write_data)
-        self.raise_event(self.conf_data.keys()[0], event='speech_recognized', data=write_data)        
+        self.raise_event(self.conf_data.keys()[0], event='speech_recognized', data=write_data)
+
+    def handle_silency_detected(self, msg):
+        self.raise_event(self.conf_data.keys()[0], event='silency_detected', data=None)
 
     def handle_start_perception(self, msg):
         self.pub_enable_speech.publish(True)

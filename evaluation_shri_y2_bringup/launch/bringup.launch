@@ -36,6 +36,7 @@
     <!-- For Google Cloud Speech -->
     <include file="$(find google_cloud_speech)/launch/bringup.launch" >
         <arg name="always_listening" value="false"/>
+        <arg name="timeout_for_silency_detect" value="8.0"/>
     </include>
     <node name="sp_speech_recognizer" type="percep_speech.py" pkg="evaluation_shri_y2_perceptions" output="screen">
         <param name="config_file" value="$(find evaluation_shri_y2_perceptions)/config/percep_speech_conf.yaml" />
