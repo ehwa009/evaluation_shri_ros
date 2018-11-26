@@ -8,11 +8,25 @@ from std_msgs.msg import Bool
 from polly_speech.msg import SpeechAction, SpeechGoal
 from mind_msgs.msg import RenderItemAction, RenderItemResult, RenderItemFeedback
 
+from langdetect import detect
+
 class EvaluationRenderSpeech:
     def __init__(self):
-        self.internal_client = actionlib.SimpleActionClient('internal_speech', SpeechAction)
-        rospy.loginfo('Wait for bringup internal speech server...')
-        self.internal_client.wait_for_server()
+        self.is_multi_lang = rospy.get_param('~use_multi_speech')
+        self.lang = ['en-US', 'ko-KR']
+        self.detect_eng = ['en', 'no']
+        self.detect_kor = ['ko']
+
+        # start two speech client
+        if self.is_multi_lang:
+            self.internal_client_1, self.internal_client_2 = ( actionlib.SimpleActionClient('internal_speech_%s'%l, SpeechAction) for l in self.lang )
+            rospy.loginfo('Wait for bringup internal speech server...')
+            self.internal_client_1.wait_for_server()
+            self.internal_client_2.wait_for_server()
+        else:
+            self.internal_client = actionlib.SimpleActionClient('internal_speech', SpeechAction)
+            rospy.loginfo('Wait for bringup internal speech server...')
+            self.internal_client.wait_for_server()
 
         self.pub_status = rospy.Publisher('u_is_speaking', Bool, queue_size=10)
         rospy.Subscriber('u_initialized', Bool, self.handle_initialized)
@@ -51,7 +65,16 @@ class EvaluationRenderSpeech:
 
         internal_goal = SpeechGoal()
         internal_goal.text = goal.data
-        self.internal_client.send_goal(internal_goal, done_cb=self.func_done, feedback_cb=self.func_feedback)
+        
+        if self.is_multi_lang:
+            lang = detect(goal.data.decode('utf-8'))
+            rospy.loginfo('Detected lang: %s', lang)
+            if lang in self.detect_eng:
+                self.internal_client_1.send_goal(internal_goal, done_cb=self.func_done, feedback_cb=self.func_feedback)
+            elif lang in self.detect_kor:
+                self.internal_client_2.send_goal(internal_goal, done_cb=self.func_done, feedback_cb=self.func_feedback)
+        else:
+            self.internal_client.send_goal(internal_goal, done_cb=self.func_done, feedback_cb=self.func_feedback)
 
         while not rospy.is_shutdown() and self.is_speaking:
             if self.server.is_preempt_requested():

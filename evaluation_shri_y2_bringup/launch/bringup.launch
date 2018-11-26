@@ -3,7 +3,7 @@
     <arg name="nao_ip" default="192.168.66.100" />
     <arg name="gaze_default_height" default="0.4" />
 
-    <arg name="camera_offset_x" default="-1.40" />
+    <arg name="camera_offset_x" default="-0.80" />
     <arg name="camera_offset_y" default="0.55" />
     <arg name="camera_offset_z" default="0.33" />
     <arg name="camera_offset_roll" default="0.0" />
@@ -15,38 +15,44 @@
     <arg name="robot_offset_z" default="0.72" />
 
     <!-- For Social Mind Bringup -->
-    <include file="$(find social_mind)/launch/bringup.launch">
+    <!-- <include file="$(find social_mind)/launch/bringup.launch">
         <arg name="project_path" value="~/shri_projects/evaluation_shri" />
         <arg name="gaze_default_height" value="$(arg gaze_default_height)" />
         <arg name="fake_render_speech" default="false" />
         <arg name="fake_render_gesture" default="false" />
         <arg name="fake_render_facial_expression" default="true" />
+    </include> -->
+
+    <include file="$(find social_mind)/launch/bringup.launch">
+        <arg name="project_path" value="~/shri_projects/evaluation_shri" />
+        <arg name="gaze_default_height" value="$(arg gaze_default_height)" />
+        <arg name="fake_render_speech" default="false" />
+        <arg name="fake_render_gesture" default="true" />
+        <arg name="fake_render_facial_expression" default="true" />
     </include>
 
     <!-- For NAO Bringup -->
-    <include file="$(find nao_shri_bringup)/launch/bringup.launch">
+    <!-- <include file="$(find nao_shri_bringup)/launch/bringup.launch">
         <arg name="use_nao_speech" value="$(arg use_nao_speech)" />
         <arg name="nao_ip" value="$(arg nao_ip)" />
-    </include>
+    </include> -->
 
-    <node name="static_robot_tf_publisher" type="static_transform_publisher" pkg="tf2_ros"
+    <!-- <node name="static_robot_tf_publisher" type="static_transform_publisher" pkg="tf2_ros"
         args="$(arg robot_offset_x) $(arg robot_offset_y) $(arg robot_offset_z) 0 0 0 world odom"
-        output="screen" />
+        output="screen" /> -->
 
     <!-- For Google Cloud Speech -->
-    <include file="$(find google_cloud_speech)/launch/bringup.launch" >
-        <arg name="always_listening" value="false"/>
-        <arg name="timeout_for_silency_detect" value="8.0"/>
-    </include>
+    <!-- <include file="$(find google_cloud_speech)/launch/bringup.launch" />
     <node name="sp_speech_recognizer" type="percep_speech.py" pkg="evaluation_shri_y2_perceptions" output="screen">
         <param name="config_file" value="$(find evaluation_shri_y2_perceptions)/config/percep_speech_conf.yaml" />
-    </node>
+    </node> -->
 
-    <!-- Dialogflow -->
+    <!-- Dialog System -->
     <include file="$(find dialogflow_dialog)/launch/bringup.launch" />
+    <!-- <include file="$(find hcn_dialog_ros)/launch/bringup.launch" /> -->
 
     <!-- For Nuitrack -->
-    <include file="$(find nuitrack_ros)/launch/nuitrack.launch">
+    <!-- <include file="$(find nuitrack_ros)/launch/nuitrack.launch">
         <arg name="use_openni2" value="false"/>
         <arg name="use_realsense" value="true"/>
 
@@ -56,23 +62,18 @@
         <arg name="offset_roll" value="$(arg camera_offset_roll)" />
         <arg name="offset_pitch" value="$(arg camera_offset_pitch)" />
         <arg name="offset_yaw" value="$(arg camera_offset_yaw)" />
-    </include>
+    </include> -->
 
-    <node name="sp_face_detector" type="percep_face_detect.py" pkg="evaluation_shri_y2_perceptions" output="screen">
+    <!-- <node name="sp_face_detector" type="percep_face_detect.py" pkg="evaluation_shri_y2_perceptions" output="screen">
         <param name="config_file" value="$(find evaluation_shri_y2_perceptions)/config/percep_face_detection_conf.yaml" />
-    </node>
-
-    <!-- Static Objects -->
-    <node name="sp_static_objects" type="percep_static_objects.py" pkg="evaluation_shri_y2_perceptions" output="screen">
-        <param name="config_file" value="$(find evaluation_shri_y2_perceptions)/config/percep_static_objects_conf.yaml" />
-        <param name="object_list_file" value="$(find evaluation_shri_y2_perceptions)/config/object_list.yaml" />
-    </node>
-    <node name="object_tf_publisher" type="objects_tf_publisher.py" pkg="evaluation_shri_y2_perceptions" output="screen" />
+    </node> -->
 
     <!-- For Polly Speech -->
     <include file="$(find polly_speech)/launch/bringup.launch" unless="$(arg use_nao_speech)" />
-    <node name="render_speech" type="render_speech.py" pkg="evaluation_shri_y2_renders" output="screen" unless="$(arg use_nao_speech)" />
+    <node name="render_speech" type="render_speech.py" pkg="evaluation_shri_y2_renders" output="screen" unless="$(arg use_nao_speech)">
+        <param name="use_multi_speech" value="true" />
+    </node>
 
     <!-- For Commmand GUI -->
-    <node name="command_buttons" type="rqt_shri_command_buttons" pkg="rqt_shri_command_buttons" output="screen"/>
+    <!-- <node name="command_buttons" type="rqt_shri_command_buttons" pkg="rqt_shri_command_buttons" output="screen"/> -->
 </launch>
