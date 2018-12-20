@@ -14,7 +14,7 @@ class EvaluationRenderSpeech:
     def __init__(self):
         self.is_multi_lang = rospy.get_param('~use_multi_speech')
         self.lang = ['en-US', 'ko-KR']
-        self.detect_eng = ['en', 'no']
+        self.detect_eng = ['en', 'no', 'so', 'hr']
         self.detect_kor = ['ko']
 
         # start two speech client

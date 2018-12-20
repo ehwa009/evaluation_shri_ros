@@ -14,15 +14,13 @@
     <arg name="robot_offset_y" default="0.0" />
     <arg name="robot_offset_z" default="0.72" />
 
-    <!-- For Social Mind Bringup -->
-    <!-- <include file="$(find social_mind)/launch/bringup.launch">
-        <arg name="project_path" value="~/shri_projects/evaluation_shri" />
-        <arg name="gaze_default_height" value="$(arg gaze_default_height)" />
-        <arg name="fake_render_speech" default="false" />
-        <arg name="fake_render_gesture" default="false" />
-        <arg name="fake_render_facial_expression" default="true" />
-    </include> -->
+    <!-- arguments for dialogue system -->
+    <arg name="use_hcn_dialogue" default="true" />
+    <arg name="network_model" default="gru" />
+    <arg name="lang" default="kor" />
+    <arg name="action_mask" default="true" />
 
+    <!-- For Social Mind Bringup -->
     <include file="$(find social_mind)/launch/bringup.launch">
         <arg name="project_path" value="~/shri_projects/evaluation_shri" />
         <arg name="gaze_default_height" value="$(arg gaze_default_height)" />
@@ -42,14 +40,25 @@
         output="screen" /> -->
 
     <!-- For Google Cloud Speech -->
-    <!-- <include file="$(find google_cloud_speech)/launch/bringup.launch" />
+    <include file="$(find google_cloud_speech)/launch/bringup.launch">
+        <arg name="timeout_for_silency_detect" value="8.0" />
+        <arg name="always_listening" value="false" />
+    </include>
     <node name="sp_speech_recognizer" type="percep_speech.py" pkg="evaluation_shri_y2_perceptions" output="screen">
         <param name="config_file" value="$(find evaluation_shri_y2_perceptions)/config/percep_speech_conf.yaml" />
-    </node> -->
+    </node>
 
     <!-- Dialog System -->
-    <include file="$(find dialogflow_dialog)/launch/bringup.launch" />
-    <!-- <include file="$(find hcn_dialog_ros)/launch/bringup.launch" /> -->
+    <include file="$(find dialogue_system)/launch/bringup.launch">
+        <arg name="network_model" value="$(arg network_model)" />
+        <arg name="lang" value="$(arg lang)" />
+        <arg name="action_mask" value="$(arg action_mask)" />
+    </include>
+
+    <!-- cloud database -->
+    <include file="$(find dynamodb_ros)/launch/bringup.launch">
+        <arg name="lang" value="$(arg lang)" />
+    </include>
 
     <!-- For Nuitrack -->
     <!-- <include file="$(find nuitrack_ros)/launch/nuitrack.launch">
@@ -75,5 +84,5 @@
     </node>
 
     <!-- For Commmand GUI -->
-    <!-- <node name="command_buttons" type="rqt_shri_command_buttons" pkg="rqt_shri_command_buttons" output="screen"/> -->
+    <node name="command_buttons" type="rqt_shri_command_buttons" pkg="rqt_shri_command_buttons" output="screen"/>
 </launch>
