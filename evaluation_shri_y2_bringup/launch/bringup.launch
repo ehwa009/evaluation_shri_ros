@@ -15,9 +15,12 @@
     <arg name="robot_offset_z" default="0.72" />
 
     <!-- arguments for dialogue system -->
-    <arg name="use_hcn_dialogue" default="true" />
+    <!-- <arg name="use_hcn_dialogue" default="true" /> -->
     <arg name="network_model" default="gru" />
+    <!-- <arg name="network_model" default="hcn_lstm" /> -->
+    
     <arg name="lang" default="kor" />
+    <!-- <arg name="lang" default="eng" /> -->
     <arg name="action_mask" default="true" />
 
     <!-- For Social Mind Bringup -->
@@ -30,14 +33,14 @@
     </include>
 
     <!-- For NAO Bringup -->
-    <!-- <include file="$(find nao_shri_bringup)/launch/bringup.launch">
+    <include file="$(find nao_shri_bringup)/launch/bringup.launch">
         <arg name="use_nao_speech" value="$(arg use_nao_speech)" />
         <arg name="nao_ip" value="$(arg nao_ip)" />
-    </include> -->
+    </include>
 
-    <!-- <node name="static_robot_tf_publisher" type="static_transform_publisher" pkg="tf2_ros"
+    <node name="static_robot_tf_publisher" type="static_transform_publisher" pkg="tf2_ros"
         args="$(arg robot_offset_x) $(arg robot_offset_y) $(arg robot_offset_z) 0 0 0 world odom"
-        output="screen" /> -->
+        output="screen" />
 
     <!-- For Google Cloud Speech -->
     <include file="$(find google_cloud_speech)/launch/bringup.launch">

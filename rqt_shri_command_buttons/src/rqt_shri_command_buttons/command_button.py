@@ -105,6 +105,8 @@ class CommandButtons(Plugin):
             self.scenario_selected = True
 
     def handle_start_scenario(self):
+        global start 
+        start = rospy.get_rostime()
         # msg = RaisingEvents()
         # msg.header.stamp = rospy.Time.now()
         # msg.events.append('human_appeared')
@@ -115,6 +117,8 @@ class CommandButtons(Plugin):
         self._widget.buttonStart.setEnabled(False)
 
     def handle_complete_scenario(self, msg):
+        end = rospy.get_rostime()
+        rospy.logwarn("duration: %i seconds", (end.secs-start.secs))
         rospy.sleep(9)
         self.pub_stop_speech_recognition.publish()
         self._widget.buttonStart.setEnabled(True)
