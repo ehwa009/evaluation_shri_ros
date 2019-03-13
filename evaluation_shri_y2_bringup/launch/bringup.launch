@@ -15,6 +15,8 @@
     <arg name="robot_offset_y" default="0.0" />
     <arg name="robot_offset_z" default="0.72" />
 
+    <arg name="user_number" default="0" />
+
 
     <!-- For Social Mind Bringup -->
     <include file="$(find social_mind)/launch/bringup.launch">
@@ -38,7 +40,7 @@
 
     <!-- For Google Cloud Speech -->
     <include file="$(find google_cloud_speech)/launch/bringup.launch">
-        <arg name="timeout_for_silency_detect" value="8.0" />
+        <arg name="timeout_for_silency_detect" value="10.0" />
         <arg name="always_listening" value="false" />
     </include>
     <node name="sp_speech_recognizer" type="percep_speech.py" pkg="evaluation_shri_y2_perceptions" output="screen">
@@ -46,7 +48,9 @@
     </node>
 
     <!-- Dialog System -->
-    <include file="$(find dialogue_system)/launch/bringup.launch" />
+    <include file="$(find dialogue_system)/launch/bringup.launch">
+        <arg name="user_number" value="$(arg user_number)" />
+    </include>
     
     <!-- For Nuitrack -->
     <!-- <include file="$(find nuitrack_ros)/launch/nuitrack.launch">
